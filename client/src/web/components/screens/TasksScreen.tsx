@@ -20,6 +20,12 @@ export enum TodoFilter {
     NonCompleted
 }
 
+const SingleTaskComponent = ({task}: { task: TodoTask }) => (
+    <li key={`story${task.id}`}>
+        <input type="checkbox" checked={task.isCompleted} onChange={event => task.isCompleted = event.target.checked}/>
+        <span className={`task ${task.isCompleted ? 'completed' : ''}`}>{task.content}</span>
+    </li>
+);
 
 @observer
 export default class TasksScreen extends React.Component<TasksScreenProps, TasksScreenState> {
@@ -99,12 +105,7 @@ export default class TasksScreen extends React.Component<TasksScreenProps, Tasks
                 </div>
 
                 <ul>
-                    {this.ShownTasks.map(x => (
-                        <li key={`story${x.id}`}>
-                            <input type="checkbox" checked={x.isCompleted} onChange={event => x.isCompleted = event.target.checked}/>
-                            <span className={`task ${x.isCompleted ? 'completed' : ''}`}>{x.content}</span>
-                        </li>
-                    ))}
+                    {this.ShownTasks.map(x => <SingleTaskComponent task={x}/>)}
                 </ul>
 
                 <form onSubmit={this.onSubmitTask.bind(this)}>
