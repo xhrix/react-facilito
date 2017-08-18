@@ -1,9 +1,14 @@
 {
-  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist"
-  },
-  "include": [
-    "src/**/*"
-  ]
+    "sourceMap": true,
+    "jsx": "react",
+    "module": "commonjs",
+    "allowJs": true,
+    "target": "es6",
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "noImplicitReturns": true,
+    "removeComments": true,
+    "preserveConstEnums": true
+  }
 }
