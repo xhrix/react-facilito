@@ -1,1 +1,1 @@
-console.log('ok');
+import './examples/express-server';

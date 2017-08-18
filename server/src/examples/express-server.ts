@@ -8,8 +8,12 @@ const io = socketIo(server);
 
 server.listen(8000);
 
+app.use(express.static('public'));
+
 app.get('/', function (req, res) {
-    res.sendFile('/index.html', {root: __dirname + '/../'});
+    res.sendFile('/index.html', {root: __dirname + '/../../'}, error => {
+        console.log('express GET fail', error);
+    });
 });
 
 io.on('connection', function (socket) {
