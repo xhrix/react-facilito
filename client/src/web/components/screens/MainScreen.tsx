@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {observer} from "mobx-react";
 import {observable} from "mobx";
+import LikeCount from '../common/LikeCount';
 
 export interface MainScreenProps {
 
@@ -27,6 +28,8 @@ export default class MainScreen extends React.Component<MainScreenProps, MainScr
             <div>
                 <h2>I'm the main screen component.</h2>
                 <FunctionalComponent count={this.count}/>
+                <br/>
+                <LikeCount howManyLikes={this.count}/>
             </div>
         );
     }
