@@ -47,7 +47,7 @@ export default class TasksScreen extends React.Component<TasksScreenProps, Tasks
                 <ul>
                     {this.tasks.map(x => (
                         <li key={`story${x.id}`}>
-                            <input type="checkbox" checked={x.isCompleted} onChange={event => null}/>
+                            <input type="checkbox" checked={x.isCompleted} onChange={event => x.isCompleted = event.target.checked}/>
                             <span>{x.content}</span>
                         </li>
                     ))}
