@@ -10,6 +10,8 @@ export interface MainScreenState {
 
 }
 
+const FunctionalComponent = ({count}: { count: number }) => <div>Counting: {count}</div>
+
 @observer
 export default class MainScreen extends React.Component<MainScreenProps, MainScreenState> {
 
@@ -22,7 +24,10 @@ export default class MainScreen extends React.Component<MainScreenProps, MainScr
 
     render() {
         return (
-            <div>I'm the main screen component ({this.count}).</div>
+            <div>
+                <h2>I'm the main screen component.</h2>
+                <FunctionalComponent count={this.count}/>
+            </div>
         );
     }
 }
