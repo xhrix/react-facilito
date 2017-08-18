@@ -8,10 +8,10 @@ const io = socketIo(server);
 
 server.listen(8000);
 
-app.use(express.static('public'));
+app.use(express.static('../client/public'));
 
 app.get('/', function (req, res) {
-    res.sendFile('/index.html', {root: __dirname + '/../../'}, error => {
+    res.sendFile('/index.html', {root: __dirname + '/../../../client/public/'}, error => {
         console.log('express GET fail', error);
     });
 });

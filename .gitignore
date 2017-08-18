@@ -1,4 +1,5 @@
 .idea/
 node_modules/
 client/dist/
+client/public/dist/
 server/dist/
