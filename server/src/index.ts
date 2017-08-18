@@ -10,9 +10,10 @@ app.listen(8000);
 console.log('listening on port 8000');
 
 function handler(req: IncomingMessage, res: ServerResponse) {
-    fs.readFile(__dirname + '/index.html',
+    fs.readFile(__dirname + '/../index.html',
         function (err, data) {
             if (err) {
+                console.log(err);
                 res.writeHead(500);
                 return res.end('Error loading index.html');
             }
@@ -23,9 +24,9 @@ function handler(req: IncomingMessage, res: ServerResponse) {
 }
 
 io.on('connection', function (socket) {
-    socket.emit('news', {hello: 'world'});
+    socket.emit('news', {emittedFromServer: 'hi world'});
     socket.on('my other event', function (data) {
-        console.log(data);
+        console.log('received from client', data);
     });
 });
 

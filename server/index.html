@@ -1,1 +1,8 @@
-Hi from node!
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io('http://localhost:8000');
+    socket.on('news', function (data) {
+        console.log('client received "news" event from server', data);
+        socket.emit('my other event', {sentFromClient: {hello: 'world'}});
+    });
+</script>
