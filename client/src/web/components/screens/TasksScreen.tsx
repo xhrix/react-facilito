@@ -14,6 +14,12 @@ export interface TasksScreenState {
 
 }
 
+export enum TodoFilter {
+    Completed,
+    All,
+    NonCompleted
+}
+
 
 @observer
 export default class TasksScreen extends React.Component<TasksScreenProps, TasksScreenState> {
@@ -24,9 +30,12 @@ export default class TasksScreen extends React.Component<TasksScreenProps, Tasks
     @observable
     private newTaskText = '';
 
+    @observable
+    private filter = TodoFilter.All;
+
     private onSubmitTask(event?: SyntheticEvent<HTMLFormElement>) {
         event.preventDefault();
-        if(this.newTaskText === '') {
+        if (this.newTaskText === '') {
             alert('Escribe un texto');
             return;
         }
@@ -40,12 +49,57 @@ export default class TasksScreen extends React.Component<TasksScreenProps, Tasks
         this.tasks.push(newTask);
     }
 
+    get ShownTasks() {
+        switch (this.filter) {
+            case TodoFilter.Completed:
+                return this.tasks.filter(x => x.isCompleted);
+            case TodoFilter.NonCompleted:
+                return this.tasks.filter(x => !x.isCompleted);
+            default:
+                return this.tasks;
+        }
+    }
+
     render() {
         return (
             <div>
-                <h2>Tasks.</h2>
+                <h2>Tasks</h2>
+
+                <div>
+                    Filter
+                    <ul>
+                        <li>
+                            <label>
+                                Todas
+                                <input
+                                    checked={this.filter === TodoFilter.All} type="radio"
+                                    onChange={event => this.filter = TodoFilter.All}
+                                />
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                Completadas
+                                <input
+                                    checked={this.filter === TodoFilter.Completed} type="radio"
+                                    onChange={event => this.filter = TodoFilter.Completed}
+                                />
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                No completadas
+                                <input
+                                    checked={this.filter === TodoFilter.NonCompleted} type="radio"
+                                    onChange={event => this.filter = TodoFilter.NonCompleted}
+                                />
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+
                 <ul>
-                    {this.tasks.map(x => (
+                    {this.ShownTasks.map(x => (
                         <li key={`story${x.id}`}>
                             <input type="checkbox" checked={x.isCompleted} onChange={event => x.isCompleted = event.target.checked}/>
                             <span>{x.content}</span>
