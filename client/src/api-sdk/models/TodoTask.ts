@@ -6,4 +6,7 @@ export default class TodoTask {
 
     @observable
     public isCompleted = false;
+
+    @observable
+    public comments: string[] = [];
 }

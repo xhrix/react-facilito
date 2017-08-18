@@ -41,19 +41,22 @@ const TaskFilterComponent = (props: { children?: ReactNode, filter: TodoFilter, 
     </li>
 );
 
-@observer
-export default class TasksScreen extends React.Component<TasksScreenProps, TasksScreenState> {
+class TasksScreenLogic {
+    // constructor() {
+    //     // Alternative to field arrow function.
+    //     this.onSubmitTask = this.onSubmitTask.bind(this);
+    // }
 
     @observable
     private tasks = [todoTask1, todoTask2];
 
     @observable
-    private newTaskText = '';
+    public newTaskText = '';
 
     @observable
-    private filter = TodoFilter.All;
+    public filter = TodoFilter.All;
 
-    private onSubmitTask(event?: SyntheticEvent<HTMLFormElement>) {
+    public onSubmitTask = (event?: SyntheticEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (this.newTaskText === '') {
             alert('Escribe un texto');
@@ -67,7 +70,7 @@ export default class TasksScreen extends React.Component<TasksScreenProps, Tasks
 
         this.newTaskText = '';
         this.tasks.push(newTask);
-    }
+    };
 
     get ShownTasks() {
         switch (this.filter) {
@@ -79,8 +82,17 @@ export default class TasksScreen extends React.Component<TasksScreenProps, Tasks
                 return this.tasks;
         }
     }
+}
+
+@observer
+export default class TasksScreen extends React.Component<TasksScreenProps, TasksScreenState> {
+
+    private logic = new TasksScreenLogic();
 
     render() {
+
+        const filter = this.logic.filter;
+
         return (
             <div>
                 <h2>Tasks</h2>
@@ -88,18 +100,18 @@ export default class TasksScreen extends React.Component<TasksScreenProps, Tasks
                 <div>
                     Filter
                     <ul>
-                        <TaskFilterComponent activeFilter={this.filter} filter={TodoFilter.All} onFilter={filter => this.filter = filter}>Todas</TaskFilterComponent>
-                        <TaskFilterComponent activeFilter={this.filter} filter={TodoFilter.Completed} onFilter={filter => this.filter = filter}>Completadas</TaskFilterComponent>
-                        <TaskFilterComponent activeFilter={this.filter} filter={TodoFilter.NonCompleted} onFilter={filter => this.filter = filter}>No completadas</TaskFilterComponent>
+                        <TaskFilterComponent activeFilter={filter} filter={TodoFilter.All} onFilter={filter => this.logic.filter = filter}>Todas</TaskFilterComponent>
+                        <TaskFilterComponent activeFilter={filter} filter={TodoFilter.Completed} onFilter={filter => this.logic.filter = filter}>Completadas</TaskFilterComponent>
+                        <TaskFilterComponent activeFilter={filter} filter={TodoFilter.NonCompleted} onFilter={filter => this.logic.filter = filter}>No completadas</TaskFilterComponent>
                     </ul>
                 </div>
 
                 <ul>
-                    {this.ShownTasks.map(x => <SingleTaskComponent key={`task-${x.id}`} task={x}/>)}
+                    {this.logic.ShownTasks.map(x => <SingleTaskComponent key={`task-${x.id}`} task={x}/>)}
                 </ul>
 
-                <form onSubmit={this.onSubmitTask.bind(this)}>
-                    <input type="text" placeholder="Nueva tarea" value={this.newTaskText} onChange={e => this.newTaskText = e.target.value}/>
+                <form onSubmit={this.logic.onSubmitTask}>
+                    <input type="text" placeholder="Nueva tarea" value={this.logic.newTaskText} onChange={e => this.logic.newTaskText = e.target.value}/>
                     <button type="submit">Agregar</button>
                 </form>
             </div>
