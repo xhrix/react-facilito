@@ -3,7 +3,7 @@ import {observer} from "mobx-react";
 import {observable} from "mobx";
 import todoTask1 from "../../../api-sdk/mocks/todo-task/todo-task-1";
 import todoTask2 from "../../../api-sdk/mocks/todo-task/todo-task-2";
-import {SyntheticEvent} from "react";
+import {ReactNode, SyntheticEvent} from "react";
 import TodoTask from "../../../api-sdk/models/TodoTask";
 
 export interface TasksScreenProps {
@@ -20,10 +20,24 @@ export enum TodoFilter {
     NonCompleted
 }
 
-const SingleTaskComponent = ({task}: { task: TodoTask }) => (
+const SingleTaskComponent = observer(({task}: { task: TodoTask }) => (
     <li key={`story${task.id}`}>
         <input type="checkbox" checked={task.isCompleted} onChange={event => task.isCompleted = event.target.checked}/>
         <span className={`task ${task.isCompleted ? 'completed' : ''}`}>{task.content}</span>
+    </li>
+));
+
+const TaskFilterComponent = (props: { children?: ReactNode, filter: TodoFilter, onFilter: (filter: TodoFilter) => void, activeFilter: TodoFilter }) => (
+    <li>
+        <label>
+            {props.children}
+            <input checked={props.filter === props.activeFilter} type="radio" onChange={event => {
+                if (!event.target.checked) {
+                    return;
+                }
+                props.onFilter(props.filter);
+            }}/>
+        </label>
     </li>
 );
 
@@ -74,38 +88,14 @@ export default class TasksScreen extends React.Component<TasksScreenProps, Tasks
                 <div>
                     Filter
                     <ul>
-                        <li>
-                            <label>
-                                Todas
-                                <input
-                                    checked={this.filter === TodoFilter.All} type="radio"
-                                    onChange={event => this.filter = TodoFilter.All}
-                                />
-                            </label>
-                        </li>
-                        <li>
-                            <label>
-                                Completadas
-                                <input
-                                    checked={this.filter === TodoFilter.Completed} type="radio"
-                                    onChange={event => this.filter = TodoFilter.Completed}
-                                />
-                            </label>
-                        </li>
-                        <li>
-                            <label>
-                                No completadas
-                                <input
-                                    checked={this.filter === TodoFilter.NonCompleted} type="radio"
-                                    onChange={event => this.filter = TodoFilter.NonCompleted}
-                                />
-                            </label>
-                        </li>
+                        <TaskFilterComponent activeFilter={this.filter} filter={TodoFilter.All} onFilter={filter => this.filter = filter}>Todas</TaskFilterComponent>
+                        <TaskFilterComponent activeFilter={this.filter} filter={TodoFilter.Completed} onFilter={filter => this.filter = filter}>Completadas</TaskFilterComponent>
+                        <TaskFilterComponent activeFilter={this.filter} filter={TodoFilter.NonCompleted} onFilter={filter => this.filter = filter}>No completadas</TaskFilterComponent>
                     </ul>
                 </div>
 
                 <ul>
-                    {this.ShownTasks.map(x => <SingleTaskComponent task={x}/>)}
+                    {this.ShownTasks.map(x => <SingleTaskComponent key={`task-${x.id}`} task={x}/>)}
                 </ul>
 
                 <form onSubmit={this.onSubmitTask.bind(this)}>
