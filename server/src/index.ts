@@ -24,3 +24,5 @@ io.on('connection', function (socket) {
         console.log(data);
     });
 });
+
+console.log('Go to http://localhost:8000');
