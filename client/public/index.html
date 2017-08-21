@@ -1,17 +1,6 @@
 <head>
     <base href="http://localhost:8000">
 </head>
-<link rel="stylesheet" href="css/main.css">
-<script src="/socket.io/socket.io.js"></script>
-<script>
-    var socket = io('http://localhost:8000');
-    socket.on('news', function (data) {
-        console.log('client received "news" event from server', data);
-        socket.emit('my other event', {sentFromClient: {hello: 'world'}});
-    });
-</script>
-
-<h1>Hola, react!</h1>
 
 <!--React app container-->
 <div id="app"></div>
