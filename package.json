@@ -33,6 +33,7 @@
     "awesome-typescript-loader": "^3.2.3",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.1",
+    "debug": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-cli": "^1.4.0",
     "gulp-typescript": "^3.2.2",
