@@ -1,6 +1,6 @@
 const gulp = require('gulp');
 const ts = require('gulp-typescript');
-const JSON_FILES = ['src/*.json', 'src/**/*.json'];
+const JSON_FILES = ['server/src/*.json', 'server/src/**/*.json'];
 
 gulp.task('scripts', function () {
     const tsProject = ts.createProject('server/tsconfig.json');
