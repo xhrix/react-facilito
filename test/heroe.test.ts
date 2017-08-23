@@ -1,6 +1,7 @@
 import * as mocha from 'mocha';
 import * as chai from 'chai';
-import chaiHttp = require('chai-http');
+
+const chaiHttp = require('chai-http');
 
 import app from '../src/server/App';
 
@@ -50,10 +51,8 @@ describe('GET api/v1/heroes/:id', () => {
             });
     });
 
-    it('should return Luke Cage', () => {
-        return chai.request(app).get('/api/v1/heroes/1')
-            .then(res => {
-                expect(res.body.hero.name).to.equal('Luke Cage');
-            });
+    it('should return Luke Cage', async () => {
+        const res = await chai.request(app).get('/api/v1/heroes/1');
+        expect(res.body.hero.name).to.equal('Luke Cage');
     });
 });
