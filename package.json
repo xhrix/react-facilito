@@ -5,11 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --reporter spec --compilers ts:ts-node/register 'test/**/*.test.ts'",
-    "start": "node server/dist/index.js",
-    "server": "cd server && tsc && node dist/index.js",
-    "server-watch": "cd server && supervisor -w dist dist/index.js",
-    "build-server-watch": "cd server && tsc -w",
-    "client-watch": "cd client && webpack --watch"
+    "start": "supervisor -w dist/server dist/server/index.js",
+    "build": "gulp",
+    "build-client-watch": "cd client && webpack --watch"
   },
   "repository": {
     "type": "git",

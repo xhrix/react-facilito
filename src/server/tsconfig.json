@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
+    "outDir": "../../dist/server",
     "target": "es2017",
     "module": "commonjs",
     "noImplicitAny": true,
@@ -9,7 +9,7 @@
     "sourceMap": true
   },
   "include": [
-    "src/**/*"
+    "./**/*"
   ],
   "exclude": [
     "**/node_modules",
