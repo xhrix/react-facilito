@@ -26,13 +26,13 @@ class HeroRouter {
      */
     private init() {
         this.router.get('/', HeroRouter.getAll);
-        this.router.get('/:id', this.getOne);
+        this.router.get('/:id', HeroRouter.getOne);
     }
 
     /**
      * GET one hero by id
      */
-    public getOne(req: Request, res: Response, next: NextFunction) {
+    public static getOne(req: Request, res: Response, next: NextFunction) {
         let query = parseInt(req.params.id);
         let hero = Heroes.find(hero => hero.id === query);
         if (hero) {
