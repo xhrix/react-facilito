@@ -4,7 +4,8 @@
   "description": "React workshop",
   "main": "index.js",
   "scripts": {
-    "test": "TS_NODE_COMPILER_OPTIONS='{\"target\":\"es2017\"}' mocha --reporter spec --compilers ts:ts-node/register 'test/**/*.test.ts'",
+    "test--override-compiler-options": "TS_NODE_COMPILER_OPTIONS='{\"target\":\"es2017\"}' mocha --reporter spec --compilers ts:ts-node/register 'test/**/*.test.ts'",
+    "test": "mocha --reporter spec --compilers ts:ts-node/register 'test/**/*.test.ts'",
     "start": "supervisor -w dist/server dist/server/index.js",
     "build": "gulp",
     "build-client-watch": "cd client && webpack --watch"
