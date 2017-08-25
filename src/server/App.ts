@@ -3,6 +3,7 @@ import * as express from 'express';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
 import HeroRouter from "./routes/HeroRouter";
+import TodoTaskRouter from "./routes/TodoTaskRouter";
 
 // Creates and configures an ExpressJS web server.
 class App {
@@ -30,7 +31,18 @@ class App {
         // This is just to get up and running, and to make sure what we've got is working so far. This function will
         // change when we start to add more API endpoints.
 
+        this.express.use('/api/v1/todo-task', TodoTaskRouter);
+        this.express.use('/api/v1/heroes', HeroRouter);
+
+        // Api routes
         const router = express.Router();
+        const publicRoot = {root: __dirname + '/../../src/client/public/'};
+        router.get('/**', (req, res, next) => {
+            res.sendFile('/index.html', {...publicRoot}, error => {
+                console.log('express GET fail', error);
+            });
+        });
+        this.express.use('/', router);
 
         // placeholder route handler
         // router.get('/', (req, res, next) => {
@@ -38,17 +50,6 @@ class App {
         //         message: 'Hello World!'
         //     });
         // });
-
-        const publicRoot = {root: __dirname + '/../../src/client/public/'};
-
-        router.get('/**', (req, res, next) => {
-            res.sendFile('/index.html', {...publicRoot}, error => {
-                console.log('express GET fail', error);
-            });
-        });
-
-        this.express.use('/', router);
-        this.express.use('/api/v1/heroes', HeroRouter);
     }
 }
 
