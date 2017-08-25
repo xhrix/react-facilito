@@ -5,6 +5,7 @@ import todoTask1 from "../../../api-sdk/mocks/todo-task/todo-task-1";
 import todoTask2 from "../../../api-sdk/mocks/todo-task/todo-task-2";
 import {ReactNode, SyntheticEvent} from "react";
 import TodoTask from "../../../api-sdk/models/TodoTask";
+import {Router, Route, browserHistory} from 'react-router';
 
 export interface TasksScreenProps {
 
@@ -85,7 +86,7 @@ class TasksScreenLogic {
 }
 
 @observer
-export default class TasksScreen extends React.Component<TasksScreenProps, TasksScreenState> {
+export class TasksScreen extends React.Component<TasksScreenProps, TasksScreenState> {
 
     private logic = new TasksScreenLogic();
 
@@ -115,6 +116,21 @@ export default class TasksScreen extends React.Component<TasksScreenProps, Tasks
                     <button type="submit">Agregar</button>
                 </form>
             </div>
+        );
+    }
+}
+
+const ScreenA = () => (<div>Screen A</div>);
+const ScreenB = () => (<div>Screen B</div>);
+
+export default class App extends React.Component {
+    render() {
+        return (
+            <Router history={browserHistory}>
+                <Route path="/" component={TasksScreen}/>
+                <Route path="/screen-a" component={ScreenA}/>
+                <Route path="/screen-b" component={ScreenB}/>
+            </Router>
         );
     }
 }
