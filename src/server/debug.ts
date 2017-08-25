@@ -3,6 +3,7 @@ import {Connection, createConnection, Entity} from 'typeorm'
 import Photo from "./entities/Photo";
 import PhotoMeta from "./entities/PhotoMeta";
 import * as debug from "debug";
+import TodoTask from "./entities/TodoTask";
 
 const d = debug('typeorm:debug');
 
@@ -190,6 +191,20 @@ async function loadingObjectsWithTheirRelationsUsingQueryBuilder(connection: Con
     }
 }
 
+async function testTodoTasks(connection: Connection) {
+    try {
+        const todoTaskRepository = connection.getRepository(TodoTask);
+        const x = new TodoTask();
+        x.content = 'Comprar carne';
+        x.description = 'Comprar un chingo de carne';
+        x.isCompleted = false;
+        const saved = await todoTaskRepository.save(x);
+        d('testTodoTasks', saved);
+    } catch (error) {
+        d('testTodoTasks fail', error);
+    }
+}
+
 async function test() {
     try {
         const connection = await getConnection();
@@ -201,7 +216,8 @@ async function test() {
         // await removePhotoFromDatabase(connection);
         // await persistingAnObjectWithAOneToOneRelation(connection);
         // await loadingObjectsWithTheirRelationsUsingFindOptions(connection);
-        await loadingObjectsWithTheirRelationsUsingQueryBuilder(connection);
+        // await loadingObjectsWithTheirRelationsUsingQueryBuilder(connection);
+        await testTodoTasks(connection);
     } catch (error) {
         d('fail', error);
     }
