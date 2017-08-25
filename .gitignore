@@ -4,3 +4,5 @@ client/dist/
 client/public/dist/
 server/dist/
 dist/
+**/.tmp/
+*.min.js
