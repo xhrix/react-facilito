@@ -26,16 +26,26 @@ class App {
 
     // Configure API endpoints.
     private routes(): void {
-        /* This is just to get up and running, and to make sure what we've got is
-         * working so far. This function will change when we start to add more
-         * API endpoints */
-        let router = express.Router();
+        // This is just to get up and running, and to make sure what we've got is working so far. This function will
+        // change when we start to add more API endpoints.
+
+        const router = express.Router();
+
         // placeholder route handler
+        // router.get('/', (req, res, next) => {
+        //     res.json({
+        //         message: 'Hello World!'
+        //     });
+        // });
+
+        const publicRoot = {root: __dirname + '/../../src/client/public/'};
+
         router.get('/', (req, res, next) => {
-            res.json({
-                message: 'Hello World!'
+            res.sendFile('/index.html', {...publicRoot}, error => {
+                console.log('express GET fail', error);
             });
         });
+
         this.express.use('/', router);
         this.express.use('/api/v1/heroes', HeroRouter);
     }
