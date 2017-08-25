@@ -2,7 +2,7 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        "app": "./web/entry-points/main-screen.tsx",
+        "app": "./web/entry-points/app.tsx",
     },
     output: {
         path: __dirname + '/public/dist/js/.tmp',

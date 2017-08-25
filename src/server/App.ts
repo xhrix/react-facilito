@@ -41,7 +41,7 @@ class App {
 
         const publicRoot = {root: __dirname + '/../../src/client/public/'};
 
-        router.get('/', (req, res, next) => {
+        router.get('/**', (req, res, next) => {
             res.sendFile('/index.html', {...publicRoot}, error => {
                 console.log('express GET fail', error);
             });
