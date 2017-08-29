@@ -4,19 +4,12 @@ import * as debug from "debug";
 import Photo from "./models/Photo";
 import PhotoMeta from "./models/PhotoMeta";
 import TodoTask from "./models/TodoTask";
+const rc = require('rc');
 
 const d = debug('typeorm:debug');
 
-const getConnection = () => createConnection({
-    type: "mysql",
-    host: 'localhost',
-    port: 3306,
-    username: 'root',
-    password: 'root',
-    database: 'lawea',
-    entities: [__dirname + '/models/*.js'],
-    autoSchemaSync: true,
-});
+const config = rc('app');
+const getConnection = () => createConnection({...config.DATABASE, entities: [__dirname + '/models/*.js']});
 
 const getMockPhoto = () => {
     const photo = new Photo();

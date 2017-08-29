@@ -6,3 +6,4 @@ server/dist/
 dist/
 **/.tmp/
 *.min.js
+.apprc
