@@ -3,7 +3,7 @@ const ts = require('gulp-typescript');
 const JSON_FILES = ['src/server/assets/*.json', 'src/server/assets/**/*.json'];
 
 gulp.task('scripts', function () {
-    const tsProject = ts.createProject('src/server/tsconfig.json');
+    const tsProject = ts.createProject('tsconfig.json');
     const tsResult = tsProject.src().pipe(tsProject());
     return tsResult.js.pipe(gulp.dest('dist/server'));
 });

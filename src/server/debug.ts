@@ -1,9 +1,9 @@
 import 'reflect-metadata';
 import {Connection, createConnection, Entity} from 'typeorm'
-import Photo from "./entities/Photo";
-import PhotoMeta from "./entities/PhotoMeta";
 import * as debug from "debug";
-import TodoTask from "./entities/TodoTask";
+import Photo from "./models/Photo";
+import PhotoMeta from "./models/PhotoMeta";
+import TodoTask from "./models/TodoTask";
 
 const d = debug('typeorm:debug');
 

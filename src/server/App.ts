@@ -1,56 +1,68 @@
-import * as path from 'path';
 import * as express from 'express';
-import * as logger from 'morgan';
-import * as bodyParser from 'body-parser';
-import HeroRouter from "./routes/HeroRouter";
-import TodoTaskRouter from "./routes/TodoTaskRouter";
+import Startup from "./Startup";
+import * as http from 'http';
+import * as debug from 'debug';
+import {Server} from "net";
 
-// Creates and configures an ExpressJS web server.
-class App {
+const d = debug('ts-express:server');
 
-    // ref to Express instance
-    public express: express.Application;
+/**
+ * Creates and configures an ExpressJS web server.
+ */
+export default class App {
+    /**
+     * Reference to Express instance.
+     */
+    private expressApplication: express.Application;
 
-    //Run configuration methods on the Express instance.
+    /**
+     * Reference to the server.
+     */
+    private server: Server;
+
+    /**
+     * Port the server will listen to.
+     */
+    private readonly port: number = Math.abs(parseInt(process.env.PORT, 10)) || 8000;
+
+    /**
+     * Run configuration methods on the Express instance.
+     */
     constructor() {
-        this.express = express();
-        this.middleware();
-        this.routes();
+        this.expressApplication = express();
+        Startup.Configure(this.expressApplication);
     }
 
-    // Configure Express middleware.
-    private middleware(): void {
-        this.express.use(logger('dev'));
-        this.express.use(bodyParser.json());
-        this.express.use(bodyParser.urlencoded({extended: false}));
-        this.express.use(express.static('src/client/public'));
+    /**
+     * Runs the server.
+     */
+    public Run(): void {
+        this.expressApplication.set('port', this.port);
+        this.server = http.createServer(this.expressApplication);
+        this.server.listen(this.port);
+        this.server.on('error', this.onError);
+        this.server.on('listening', this.onListening);
     }
 
-    // Configure API endpoints.
-    private routes(): void {
-        // This is just to get up and running, and to make sure what we've got is working so far. This function will
-        // change when we start to add more API endpoints.
+    private onListening = () => {
+        const address = this.server.address();
+        d(`Listening on ${(typeof address === 'string') ? `pipe ${address}` : `port ${address.port}`}`);
+    };
 
-        this.express.use('/api/v1/todo-task', TodoTaskRouter);
-        this.express.use('/api/v1/heroes', HeroRouter);
-
-        // Api routes
-        const router = express.Router();
-        const publicRoot = {root: __dirname + '/../../src/client/public/'};
-        router.get('/**', (req, res, next) => {
-            res.sendFile('/index.html', {...publicRoot}, error => {
-                console.log('express GET fail', error);
-            });
-        });
-        this.express.use('/', router);
-
-        // placeholder route handler
-        // router.get('/', (req, res, next) => {
-        //     res.json({
-        //         message: 'Hello World!'
-        //     });
-        // });
-    }
+    private onError = (error: NodeJS.ErrnoException) => {
+        if (error.syscall !== 'listen') throw error;
+        let bind = (typeof this.port === 'string') ? 'Pipe ' + this.port : 'Port ' + this.port;
+        switch (error.code) {
+            case 'EACCES':
+                console.error(`${bind} requires elevated privileges`);
+                process.exit(1);
+                break;
+            case 'EADDRINUSE':
+                console.error(`${bind} is already in use`);
+                process.exit(1);
+                break;
+            default:
+                throw error;
+        }
+    };
 }
-
-export default new App().express;

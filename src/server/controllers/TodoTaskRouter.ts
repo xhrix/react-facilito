@@ -48,5 +48,4 @@ class TodoTaskRouter {
     }
 }
 
-const routes = new TodoTaskRouter();
-export default routes.router;
+export default new TodoTaskRouter().router;
