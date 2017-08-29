@@ -1,15 +1,12 @@
 import 'reflect-metadata';
-import {Connection, createConnection, Entity} from 'typeorm'
+import {Connection, Entity} from 'typeorm'
 import * as debug from "debug";
 import Photo from "./models/Photo";
 import PhotoMeta from "./models/PhotoMeta";
 import TodoTask from "./models/TodoTask";
-const rc = require('rc');
+import DB from "./db";
 
 const d = debug('typeorm:debug');
-
-const config = rc('app');
-const getConnection = () => createConnection({...config.DATABASE, entities: [__dirname + '/models/*.js']});
 
 const getMockPhoto = () => {
     const photo = new Photo();
@@ -200,7 +197,7 @@ async function testTodoTasks(connection: Connection) {
 
 async function test() {
     try {
-        const connection = await getConnection();
+        const connection = await DB.defaultConnection();
         // await createAndInsertIntoDatabaseUsingAEntityManager(connection);
         // await createAndInsertIntoDatabaseUsingARepository(connection);
         // await loadingPhotosFromDatabase(connection);
