@@ -14,7 +14,7 @@ const getConnection = () => createConnection({
     username: 'root',
     password: 'root',
     database: 'lawea',
-    entities: [__dirname + '/entities/*.js'],
+    entities: [__dirname + '/models/*.js'],
     autoSchemaSync: true,
 });
 
