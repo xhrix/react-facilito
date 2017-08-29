@@ -1,6 +1,6 @@
 import {Router, Request, Response, NextFunction} from 'express';
-
-const MockTasks: any[] = [];
+import DB from "../db";
+import TodoTask from "../models/TodoTask";
 
 class TodoTaskRouter {
     router: Router;
@@ -16,8 +16,16 @@ class TodoTaskRouter {
     /**
      * GET all Heroes.
      */
-    public static getAll(req: Request, res: Response, next: NextFunction) {
-        res.send(MockTasks);
+    public static async getAll(req: Request, res: Response, next: NextFunction) {
+        try {
+            const connection = await DB.defaultConnection();
+            const repo = connection.getRepository(TodoTask);
+            const tasks = await repo.find();
+            res.send(tasks);
+        } catch (error) {
+            console.error('fail', error);
+            return res.status(500).send('Internal server error');
+        }
     }
 
     /**
@@ -32,18 +40,24 @@ class TodoTaskRouter {
     /**
      * GET one hero by id
      */
-    public static getOne(req: Request, res: Response, next: NextFunction) {
-        let query = parseInt(req.params.id);
-        let found = MockTasks.find(x => x.id === query);
-        if (found) {
-            res.status(200).send(found);
-        }
-        else {
-            res.status(404)
-                .send({
-                    message: 'No task found with the given id.',
-                    status: res.status
-                });
+    public static async getOne(req: Request, res: Response, next: NextFunction) {
+        try {
+            const connection = await DB.defaultConnection();
+            const repo = connection.getRepository(TodoTask);
+            const found = await repo.findOneById(req.params.id);
+            if (found) {
+                res.status(200).send(found);
+            }
+            else {
+                res.status(404)
+                    .send({
+                        message: 'No task found with the given id.',
+                        status: res.status
+                    });
+            }
+        } catch (error) {
+            console.error('fail', error);
+            return res.status(500).send('Internal server error');
         }
     }
 }
